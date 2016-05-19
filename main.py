@@ -2,6 +2,7 @@ import os
 
 import flask
 from flask import Flask, request
+
 from cinema_parser import CinemaParser
 
 app = Flask(__name__)
@@ -16,7 +17,6 @@ def api():
 
     parser = CinemaParser(near)
 
-    # return flask.jsonify(parser.get(cinema_name='Multisala Edera', movie_name='La pazza gioia'))
     return flask.jsonify(parser.get(cinema_name=cinema_name, movie_name=movie_name))
 
 
