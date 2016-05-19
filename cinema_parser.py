@@ -1,0 +1,56 @@
+import requests
+from bs4 import BeautifulSoup
+
+API_ENDPOINT = 'https://www.google.com/movies'
+
+
+class CinemaParser:
+    def __init__(self, near):
+        self.near = near
+
+    def get(self, cinema_name=None, movie_name=None):
+        request = requests.get(API_ENDPOINT, params={'near': self.near})
+        parser = BeautifulSoup(request.content, 'html.parser')
+        output = []
+
+        theaters = parser.select('.theater')
+
+        for theater in theaters:
+            theater_name = theater.find('h2').find('a').text
+
+            if cinema_name is not None and theater_name.lower() != cinema_name.lower():
+                continue
+
+            theater_infos = {
+                'theater_name': theater_name,
+                'theater_info': theater.find('div', {'class': 'info'}).text,
+                'movies': []
+            }
+
+            movies = theater.find_all('div', class_='movie')
+
+            for movie in movies:
+                times = movie.find('div', {'class': 'times'}).find_all('span')
+                title = movie.find('a').text
+                times_string = []
+
+                if movie_name is not None and movie_name.lower() != title.lower():
+                    continue
+
+                # concat all the movie timings
+                for time in times:
+                    t = time.text.strip()
+
+                    if t:
+                        times_string.append(t)
+
+                theater_infos['movies'].append({
+                    'title': title,
+                    'times': ' - '.join(times_string)
+                })
+
+            # append all the theater infos
+            output.append(theater_infos)
+
+        # return JSON output
+        return {'data': output}
