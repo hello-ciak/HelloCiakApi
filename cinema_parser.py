@@ -27,7 +27,7 @@ class CinemaParser:
                 'movies': []
             }
 
-            movies = theater.find_all('div', class_='movie')
+            movies = theater.find_all('div', {'class': 'movie'})
 
             for movie in movies:
                 title = movie.find('a').text
