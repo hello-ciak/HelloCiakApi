@@ -36,19 +36,19 @@ class CinemaParser:
                     continue
 
                 times = movie.find('div', {'class': 'times'}).find_all('span')
-                times_string = []
+                times_strings = []
                 movie_info = movie.find('span', {'class': 'info'}).text
 
                 # concat all the movie timings
                 for time in times:
-                    t = time.text.strip()
+                    time_text = time.text.strip()
 
-                    if t:
-                        times_string.append(t)
+                    if time_text:
+                        times_strings.append(time_text)
 
                 theater_infos['movies'].append({
                     'title': title,
-                    'times': ' - '.join(times_string),
+                    'times': ' - '.join(times_strings),
                     'movie_info': movie_info
                 })
 
