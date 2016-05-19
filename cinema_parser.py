@@ -52,8 +52,10 @@ class CinemaParser:
                     'movie_info': movie_info
                 })
 
-            # append all the theater infos
-            output.append(theater_infos)
+            # return the theater infos only if some movies are there
+            if theater_infos['movies']:
+                # append all the theater infos
+                output.append(theater_infos)
 
         # return JSON output
         return {'data': output}
