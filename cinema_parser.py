@@ -1,22 +1,43 @@
 import requests
 from bs4 import BeautifulSoup
 
+CACHE_KEY_SEPARATOR = '_'
+GOOGLE_CACHE_KEY = 'google_movies_response'
 API_ENDPOINT = 'https://www.google.com/movies'
 
 
 class CinemaParser:
-    def __init__(self, near):
+    def __init__(self, near, cache):
         self.near = near
+        self.cache = cache
 
     def get(self, cinema_name=None, movie_name=None):
-        request = requests.get(API_ENDPOINT, params={'near': self.near})
-        parser = BeautifulSoup(request.content, 'html.parser')
+        # calculate the key to use in Redis
+        cache_key = CACHE_KEY_SEPARATOR.join([GOOGLE_CACHE_KEY,
+                                              str(self.near),
+                                              str(cinema_name),
+                                              str(movie_name)])
+
+        if self.cache.has(cache_key):
+            request_content = self.cache.get(cache_key)
+
+            # parse response from cached result
+            parser = BeautifulSoup(request_content, 'html.parser')
+        else:
+            # response not found in cache, ask Google
+            request = requests.get(API_ENDPOINT, params={'near': self.near})
+            parser = BeautifulSoup(request.content, 'html.parser')
+
+            # set Google call in cache
+            self.cache.set(cache_key, request.content)
+
+        # this will be the final output that will be jsonized in API response
         output = []
 
         theaters = parser.select('.theater')
 
         for theater in theaters:
-            theater_name = theater.find('h2').find('a').text
+            theater_name = theater.find('h2').text
 
             if cinema_name is not None and theater_name.lower() != cinema_name.lower():
                 continue
