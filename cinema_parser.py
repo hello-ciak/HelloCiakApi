@@ -25,10 +25,10 @@ class CinemaParser:
 
         if self.cache.has(cache_key):
             self.app.logger.debug('serving "%s" key from cache' % cache_key)
-            request_content = self.cache.get(cache_key)
+            cached_request_content = self.cache.get(cache_key)
 
             # parse response from cached result
-            parser = BeautifulSoup(request_content, 'html.parser')
+            parser = BeautifulSoup(cached_request_content, 'html.parser')
         else:
             # response not found in cache, ask Google
             self.app.logger.debug('key "%s" was not found in redis cache, asking Google...' % cache_key)
