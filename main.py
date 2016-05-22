@@ -33,7 +33,7 @@ def api():
     movie_name = request.args.get('movie_name')
 
     # Redis cache is injected as service in constructor
-    parser = CinemaParser(near, cache=redis_cache)
+    parser = CinemaParser(near, app=app, cache=redis_cache)
 
     return flask.jsonify(parser.get(cinema_name=cinema_name, movie_name=movie_name))
 
