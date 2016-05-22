@@ -14,8 +14,8 @@ class CinemaParser:
 
     def get(self, cinema_name=None, movie_name=None):
         self.app.logger.debug('Incoming request, "near": "%s", "cinema_name": "%s", "movie_name": "%s"' % (self.near,
-                                                                                                     cinema_name,
-                                                                                                     movie_name))
+                                                                                                           cinema_name,
+                                                                                                           movie_name))
 
         # calculate the key to use in Redis
         cache_key = CACHE_KEY_SEPARATOR.join([GOOGLE_CACHE_KEY,
