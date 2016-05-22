@@ -7,11 +7,16 @@ API_ENDPOINT = 'https://www.google.com/movies'
 
 
 class CinemaParser:
-    def __init__(self, near, cache):
+    def __init__(self, near, app, cache):
         self.near = near
+        self.app = app
         self.cache = cache
 
     def get(self, cinema_name=None, movie_name=None):
+        self.app.logger.debug('Incoming request, "near": "%s", "cinema_name": "%s", "movie_name": "%s"' % (self.near,
+                                                                                                     cinema_name,
+                                                                                                     movie_name))
+
         # calculate the key to use in Redis
         cache_key = CACHE_KEY_SEPARATOR.join([GOOGLE_CACHE_KEY,
                                               str(self.near),
@@ -19,12 +24,14 @@ class CinemaParser:
                                               str(movie_name)])
 
         if self.cache.has(cache_key):
+            self.app.logger.debug('serving "%s" key from cache' % cache_key)
             request_content = self.cache.get(cache_key)
 
             # parse response from cached result
             parser = BeautifulSoup(request_content, 'html.parser')
         else:
             # response not found in cache, ask Google
+            self.app.logger.debug('key "%s" was not found in redis cache, asking Google...' % cache_key)
             request = requests.get(API_ENDPOINT, params={'near': self.near})
             parser = BeautifulSoup(request.content, 'html.parser')
 
