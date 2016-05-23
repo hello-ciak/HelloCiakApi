@@ -14,8 +14,8 @@ class CinemaParser:
 
     def get(self, cinema_name=None, movie_name=None):
         self.app.logger.debug('Incoming request, "near": "%s", "cinema_name": "%s", "movie_name": "%s"' % (self.near,
-                                                                                                     cinema_name,
-                                                                                                     movie_name))
+                                                                                                           cinema_name,
+                                                                                                           movie_name))
 
         # calculate the key to use in Redis
         cache_key = CACHE_KEY_SEPARATOR.join([GOOGLE_CACHE_KEY,
@@ -25,10 +25,10 @@ class CinemaParser:
 
         if self.cache.has(cache_key):
             self.app.logger.debug('serving "%s" key from cache' % cache_key)
-            request_content = self.cache.get(cache_key)
+            cached_request_content = self.cache.get(cache_key)
 
             # parse response from cached result
-            parser = BeautifulSoup(request_content, 'html.parser')
+            parser = BeautifulSoup(cached_request_content, 'html.parser')
         else:
             # response not found in cache, ask Google
             self.app.logger.debug('key "%s" was not found in redis cache, asking Google...' % cache_key)
