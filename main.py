@@ -37,9 +37,3 @@ def api():
 
     return flask.jsonify(parser.get(cinema_name=cinema_name, movie_name=movie_name))
 
-
-if __name__ == '__main__':
-    api_port = int(os.environ.get('PORT'))
-    api_host = os.environ.get('API_HOST')
-
-    app.run(host=api_host, port=int(api_port))
