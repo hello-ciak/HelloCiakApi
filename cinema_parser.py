@@ -46,7 +46,7 @@ class CinemaParser:
         for theater in theaters:
             theater_name = theater.find('h2').text
 
-            if cinema_name is not None and theater_name.lower() != cinema_name.lower():
+            if cinema_name is not None and theater_name.lower() != cinema_name.strip().lower():
                 continue
 
             theater_infos = {
@@ -60,7 +60,7 @@ class CinemaParser:
             for movie in movies:
                 title = movie.find('a').text
 
-                if movie_name is not None and movie_name.lower() != title.lower():
+                if movie_name is not None and movie_name.strip().lower() != title.lower():
                     continue
 
                 times = movie.find('div', {'class': 'times'}).find_all('span')
