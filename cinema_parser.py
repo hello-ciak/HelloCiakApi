@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 CACHE_KEY_SEPARATOR = '_'
 GOOGLE_CACHE_KEY = 'google_movies_response'
-API_ENDPOINT = 'https://www.google.com/movies'
+API_ENDPOINT = 'https://www.google.it/movies'
 
 
 class CinemaParser:
