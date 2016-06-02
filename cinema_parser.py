@@ -19,9 +19,7 @@ class CinemaParser:
 
         # calculate the key to use in Redis
         cache_key = CACHE_KEY_SEPARATOR.join([GOOGLE_CACHE_KEY,
-                                              str(self.near),
-                                              str(cinema_name),
-                                              str(movie_name)])
+                                              str(self.near)])
 
         if self.cache.has(cache_key):
             self.app.logger.debug('serving "%s" key from cache' % cache_key)
