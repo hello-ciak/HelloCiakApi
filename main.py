@@ -50,7 +50,7 @@ def api():
     cinema_name = request.args.get('cinema_name')
     movie_name = request.args.get('movie_name')
 
-    insert = locations_table.insert().values(location=str(near))
+    insert = locations_table.insert().values(location=str(near).strip())
 
     engine.connect()
     engine.execute(insert)
